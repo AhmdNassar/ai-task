@@ -115,7 +115,7 @@ def heruisitic(l):
     dist += abs(xpos - 1) + abs(ypos - 1)
     return dist
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def aStarSearch(problem, heuristic=heruisitic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
   visited = []
