@@ -84,6 +84,43 @@ def depthFirstSearch(problem):
   print "Start's successors:", problem.getSuccessors(problem.getStartState())
   """
   "*** YOUR CODE HERE ***"
+  print("Start:", problem.getStartState())
+  print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+  print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+  explored = []
+  fringe = None #define the fringe as a Stack. You can check util.py
+  fringe.push([(problem.getStartState(), "Stop", 0)]) # adding the first node into the fringe
+  #please note that each node is represented using the path from the starting node to the it
+  while not fringe.isEmpty():
+      # print ("fringe: ", fringe.heap)
+      path = None # pop a node from the fringe
+      # print "path len: ", len(path)
+      # print "path: ", path
+
+      s = path[len(path) - 1]
+      s = s[0]
+      # print "s: ", s
+      if problem.isGoalState(s):
+          # print "FOUND SOLUTION: ", [x[1] for x in path]
+          return [x[1] for x in path][1:]
+
+      if s not in explored:
+          None # append the state to explored
+          # print "EXPLORING: ", s
+
+          for successor in problem.getSuccessors(s):
+              # print "SUCCESSOR: ", successor
+              if successor[0] not in explored:
+                  successorPath = path[:]
+                  successorPath.append(successor)
+                  # print "successorPath: ", successorPath
+                  None # push the sucessorPath into fringe
+          # else:
+          # print successor[0], " IS ALREADY EXPLORED!!"
+
+  return []
+
   util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
@@ -92,6 +129,7 @@ def breadthFirstSearch(problem):
   [2nd Edition: p 73, 3rd Edition: p 82]
   """
   "*** YOUR CODE HERE ***"
+
   util.raiseNotDefined()
       
 def uniformCostSearch(problem):
@@ -106,20 +144,11 @@ def nullHeuristic(state, problem=None):
   """
   return 0
 
-def heruisitic(l):
-    sublist = l[len(l) - 1]
-    pos = sublist[0]
-    xpos = pos[0]
-    ypos = pos[1]
-    dist = sublist[2]
-    dist += abs(xpos - 1) + abs(ypos - 1)
-    return dist
-
-def aStarSearch(problem, heuristic=heruisitic):
+def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
-  visited = []
-  fringe = util.PriorityQueueWithFunction(heruisitic)
+  vis = []
+  fringe = util.PriorityQueueWithFunction(heruisitic1)
   fringe.push([(problem.getStartState(), "Stop", 0)])
   while not fringe.isEmpty():
       path = fringe.pop()
@@ -129,8 +158,8 @@ def aStarSearch(problem, heuristic=heruisitic):
       print(cost)
       if problem.isGoalState(s):
           return [x[1] for x in path][1:]
-      if s not in visited:
-          visited.append(s)
+      if s not in vis:
+          vis.append(s)
           for successor in problem.getSuccessors(s):
               tmp_path = path[:]
               tmp_successor =(successor[0], successor[1], cost + 1)
